@@ -6,34 +6,28 @@
  * Time: 10:35
  */
 
+include 'Common.class.php';
 use core\DB;
 use core\View;
 use app\model\Article;
-class Home
+class Home extends Common
 {
-    private function beforeRun() {
-
+    private $model;
+    public function __construct() {
+        $this->model = new Article();
     }
 
-    public function run($method, $args = []) {
-        $this->beforeRun();
-        $this->$method($args);
-        $this->afterRun();
-    }
-
-    private function show() {
+    public function show() {
         $content = View::get('index');
-        echo $content;
+        return $content;
     }
 
-    private function api($args = []) {
-        $article = new Article();
-        $list = $article->testList();
+    public function api() {
+        $list = $this->model->getUserList(1);
+        foreach ($list as $k => $v) {
+            $list[$k]['time'] = date("Y-m-d H:i:s", $list[$k]['time']);
+        }
         $jsonList = json_encode($list);
-        echo $jsonList;
-    }
-
-    private function afterRun() {
-
+        return $jsonList;
     }
 }

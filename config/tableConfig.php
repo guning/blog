@@ -6,19 +6,31 @@
  * Time: 0:09
  */
 return [
-    [
-        'table' => 'user_info',
-        'field' => [],
-        'primary_key' => 'id'
-    ],
-    [
-        'table' => 'article',
-        'field' => [
-            ['user_id', 'summary', 'name'],
-            ['int(10)', 'text', 'char(32)'],
-            ['unsigned not null', 'COLLATE utf8_unicode_ci', 'COLLATE utf8_unicode_ci']
+    'table_config' => [
+        [
+            'table' => 'user',
+            'field' => [
+                ['name', 'pwd', 'permission'],
+                ['varchar(20)', 'char(32)', 'int(1)'],
+                ['COLLATE utf8_unicode_ci', 'COLLATE utf8_unicode_ci', 'unsigned not null']
+            ],
+            'primary_key' => 'id'
         ],
-        'primary_key' => 'id'
+        [
+            'table' => 'article',
+            'field' => [
+                ['title', 'summary', 'file', 'status', 'user_id'],
+                [
+                    'varchar(40)', 'varchar(150)',
+                    'char(32)', 'int(1)', 'int(10)',
+                ],
+                [
+                    'COLLATE utf8_unicode_ci', 'COLLATE utf8_unicode_ci',
+                    'COLLATE utf8_unicode_ci', 'unsigned not null default 0', 'unsigned not null',
+                ]
+            ],
+            'primary_key' => 'id'
+        ]
     ]
 
 ];

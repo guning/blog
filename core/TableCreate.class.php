@@ -24,14 +24,14 @@ class TableCreate
     {
         $this->verify([$this->table, $this->fieldType, $this->primaryKey, $this->engine, $this->charset, $this->collate]);
         $sql = '';
-        $sql .= "create table `{$this->table}` (";
+        $sql .= "create table if not EXISTS `{$this->table}` (";
         $sql .= "`{$this->primaryKey}` int(10) unsigned not null auto_increment,";
         foreach ($this->fieldType as $field => $conf) {
             $sql .= "`{$field}` {$conf},";
         }
         $sql .= "primary key (`{$this->primaryKey}`)";
         $sql .= ")engine={$this->engine} default charset={$this->charset} collate={$this->collate};";
-        echo $sql;
+        return $sql;
     }
 
     public static function create()

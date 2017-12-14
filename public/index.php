@@ -7,19 +7,16 @@
  */
 require_once '../Loader.php';
 $requestPath = $_SERVER['REQUEST_URI'];
+$tmp = explode('?', $requestPath);
+$requestPath = array_shift($tmp);
 $path = explode('/', trim($requestPath, '/'));
-$className = ucfirst($path[0]);
+$className = isset($path[0]) ? ucfirst($path[0]) : 'Home';
+$method = isset($path[1]) ? $path[1] : 'show';
+unset($path[0]);
+unset($path[1]);
 $params = [];
-if (isset($path[1])) {
-    $params = array_shift($path);
-}
-
-if (strpos($className, 'api') === false) {
-    $method = 'show';
-} else {
-    $tmp = explode('_', $className);
-    $className = $tmp[0];
-    $method = 'api';
+if (count($path) > 0) {
+    $params = array_values($path);
 }
 
 $file = '../app/controller/' . $className . '.class.php';

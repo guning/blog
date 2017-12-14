@@ -7,31 +7,21 @@
  */
 
 
-use core\View;
+include 'Common.class.php';
 use app\model\Article as ArticleModel;
-class Article
+class Article extends Common
 {
-    private function beforeRun() {
-
+    private $model;
+    public function __construct() {
+        $this->model = new ArticleModel();
     }
 
-    public function run($method, $args = []) {
-        $this->beforeRun();
-        $this->$method($args);
-        $this->afterRun();
+    public function show() {
     }
 
-    private function show() {
-    }
-
-    private function api($args = []) {
-        $id =1;
-        $article = new ArticleModel();
-        $content = $article->testArticle($id);
-        echo $content;
-    }
-
-    private function afterRun() {
-
+    public function api() {
+        $id = array_shift($this->args);
+        $res = $this->model->getArticle($id);
+        return json_encode($res);
     }
 }

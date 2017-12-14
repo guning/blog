@@ -18,7 +18,7 @@ class DB
     {
         if (empty(self::$_instance)) {
             if (empty($dbConfig) || !is_array($dbConfig)) {
-                $dbConfig = Config::getConfig('test');
+                $dbConfig = Config::getConfig('db_config');
             }
             self::$_instance = new DB($dbConfig);
         }
@@ -30,7 +30,7 @@ class DB
         if (!empty($dbConfig)) {
             $dsn = $dbConfig['type'] . ':host=' . $dbConfig['host'] . ';port=' .$dbConfig['port'] . ';dbname=' . $dbConfig['db_name'];
             $user = $dbConfig['user'];
-            $pwd = $dbConfig['pwd'];
+            $pwd = $dbConfig['password'];
             try {
                 self::$_conn = new \PDO($dsn, $user, $pwd);
             } catch (\PDOException $e) {
@@ -42,21 +42,34 @@ class DB
         }
     }
 
-    public function query($sql) {
-        $res = self::$_conn->query($sql);
-        $data = array();
-        if ($res !== false) {
-            foreach ($res as $row) {
-                foreach ($row as $key => $value) {
-                    if (is_int($key)) {
-                        unset($row[$key]);
-                    }
-                }
-                $data[] = $row;
-            }
-            return $data;
-        } else {
-            throw new \Exception('GET DBDATA ERROR');
+    private function formatArray($arr) {
+        $res = [];
+        foreach ($arr as $k => $v) {
+            $res[':' . $k] = $v;
         }
+        return $res;
+    }
+
+    public function exec($sql, $params) {
+        $params = $this->formatArray($params);
+        $pdoStatement = self::$_conn->prepare($sql);
+        $res = $pdoStatement->execute($params);
+        return $res !== false;
+    }
+
+    public function query($sql, $params) {
+        $params = $this->formatArray($params);
+        $res = self::$_conn->prepare($sql);
+        $res->execute($params);
+        if ($res !== false) {
+            $res->setFetchMode(\PDO::FETCH_ASSOC);
+            return $res->fetchAll();
+        } else {
+            throw new \Exception('GET DBDATA ERROR: ' . $sql);
+        }
+    }
+
+    public function getDB() {
+        return self::$_conn;
     }
 }

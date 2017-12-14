@@ -9,9 +9,12 @@
 namespace core;
 
 
-class CommonHelp
+class CommonHelper
 {
     public static function format() {
 
+    }
+    public static function uniqidName() {
+        return md5(microtime() . uniqid() . rand(1,10000));
     }
 }

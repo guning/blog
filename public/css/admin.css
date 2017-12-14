@@ -1,0 +1,21 @@
+.footer {
+    padding-top: 19px;
+    color: #777;
+    border-top: 1px solid #e5e5e5;
+    text-align: center;
+    background-color:  #f9f9f9;
+}
+.container{
+    margin-bottom: 0px;
+    min-width: 40%;
+    min-height: 80%;
+}
+.content {
+    min-width: 100%;
+    min-height: 600px;
+    height: auto;
+}
+.sub {
+    margin-right: 50px;
+}
+

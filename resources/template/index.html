@@ -74,19 +74,19 @@
 <script src="/js/prism.js"></script>
 <link href="/css/prism.css" rel="stylesheet">
 <script type="text/javascript">
-    var testArticle = '';
     function getDetail(elem) {
         document.getElementById('loading').style.display = 'block';
         var id = elem.id;
-        myAjax(0, 'article_api/' + id, '', function (data) {
+        myAjax(0, '/article/api/' + id, '', function (data) {
             document.getElementById('loading').style.display = 'none';
-            var article = data;
-            testArticle = data;
+            var article = JSON.parse(data);
             if (article == '') {
                 document.getElementById('article').innerHTML = 'Api get no data';
             } else {
-                article = markdownParser(article.replace(/\r\n/g, '\n'));
-                document.getElementById('article').innerHTML = article;
+                var content = markdownParser(article['file'].replace(/\r\n/g, '\n'));
+                var title = '<h1>' + article['title'] + '</h1><br>';
+                var summary = '<p class="text-info"><em>' + article['summary'] + '</em></p><hr>';
+                document.getElementById('article').innerHTML = title + summary + content;
                 Prism.highlightAll();
             }
             $("#index").fadeOut("slow", function () {
@@ -103,7 +103,7 @@
             });
             document.getElementById('loading').style.display = 'none';
         });
-        myAjax(0, 'home_api', '', function (data) {
+        myAjax(0, '/home/api', '', function (data) {
             document.getElementById('loading').style.display = 'none';
             var list = JSON.parse(data);
             if (list == '') {
