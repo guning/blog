@@ -37,9 +37,14 @@ class Gadmin extends Common
     }
 
     public function run($method, $args = []) {
-        $this->beforeRun($method);
-        $this->args = $args;
-        $res = $this->$method();
+        try {
+            $this->beforeRun($method);
+            $this->args = $args;
+            $res = $this->$method();
+        } catch (Exception $e) {
+            \core\Logger::errorLog($e->getMessage());
+            $res = "something wrong!";
+        }
         $this->afterRun($res);
     }
 

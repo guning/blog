@@ -29,4 +29,5 @@ if (file_exists($file)) {
 
 $class = new $className();
 $class->run($method, $params);
+\core\Logger::accessLog($_SERVER['REQUEST_URI'] . ' ' . $method . '->' . json_encode($params));
 

@@ -8,7 +8,6 @@
 
 namespace core;
 
-
 class DB
 {
     private static $_instance = null;

@@ -32,7 +32,12 @@ class Article
      * createTime:
      */
     public function getUserList($userId) {
-        $sql = "SELECT id,title,summary,update_time as time FROM article WHERE status=1 AND user_id=:user_id";
+        $sql = "SELECT 
+               a.id,a.title,a.summary,a.update_time as time,u.name 
+               FROM article a
+               LEFT JOIN 
+               user u 
+               ON a.user_id=u.id WHERE a.status=1";
         return $this->db->query($sql, ['user_id' => $userId]);
     }
     public function getAdminList() {

@@ -19,9 +19,9 @@ abstract class Common
     }
 
     public function run($method, $args = []) {
-        $this->beforeRun($method);
-        $this->args = $args;
         try {
+            $this->beforeRun($method);
+            $this->args = $args;
             $res = $this->$method();
             $this->afterRun($res);
         } catch (Exception $e) {
