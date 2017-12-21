@@ -34,6 +34,7 @@ class DB
                 self::$_conn = new \PDO($dsn, $user, $pwd);
             } catch (\PDOException $e) {
                 Logger::DBErrorLog('Connection failed ' . json_encode($e->getMessage()));
+                echo "500";
                 exit;
             }
         } else {

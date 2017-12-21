@@ -48,7 +48,8 @@ body {
 .jumbotron {
   text-align: center;
   border-bottom: 1px solid #e5e5e5;
-  background-image: url("../pic/bg.jpg")
+  background-image: url("../pic/bg.jpg");
+  background-size: cover;
 }
 .jumbotron .btn {
   padding: 14px 24px;
