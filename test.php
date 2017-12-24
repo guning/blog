@@ -17,4 +17,4 @@ include 'Loader.php';
 } catch (Exception $e) {
     var_dump($e->getMessage());
 }*/
-echo md5(microtime() . uniqid() . rand(1,10000));
+echo time();
