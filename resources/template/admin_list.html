@@ -65,7 +65,7 @@
                 <tbody>
                     <?php foreach($list as $element) {?>
                     <tr>
-                        <th><?php echo $element['title'];?></th>
+                        <th onclick="location.href='/article/show/<?php echo $element["id"];?>';"><?php echo $element['title'];?></th>
                         <td><?php echo $element['author'];?></td>
                         <td><?php echo $element['c_time'];?></td>
                         <td><?php echo $element['u_time'];?></td>

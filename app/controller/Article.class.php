@@ -9,6 +9,7 @@
 
 include 'Common.class.php';
 use app\model\Article as ArticleModel;
+use core\View;
 class Article extends Common
 {
     private $model;
@@ -17,6 +18,8 @@ class Article extends Common
     }
 
     public function show() {
+        $content = View::get('article');
+        return $content;
     }
 
     public function api() {

@@ -42,17 +42,7 @@
         <h3 class="text-muted">罟宁</h3>
     </div>
 
-    <div id="index">
-        <div class="jumbotron">
-            <h1>Guning's blog</h1>
-            <p class="lead">Sow nothing, reap nothing.</p>
-        </div>
-
-        <div class="row marketing">
-            <div class="col-lg-12 list" id="list"></div>
-        </div>
-    </div>
-
+    <div id="article"></div>
     <div class="pswp__preloader__icn" id="loading">
         <div class="pswp__preloader__cut">
             <div class="pswp__preloader__donut"></div>
@@ -67,29 +57,29 @@
 </div> <!-- /container -->
 
 </body>
+<script src="/js/gmarkdown.js"></script>
 <script src="/js/ajax.js"></script>
+<script src="/js/prism.js"></script>
+<link href="/css/prism.css" rel="stylesheet">
 <script type="text/javascript">
-    document.onload = myAjax(0, '/home/api', '', function (data) {
-        document.getElementById('loading').style.display = 'none';
-        var list = JSON.parse(data);
-        if (list == '') {
-            document.getElementById('list').innerHTML = 'Nothing to show!';
-        } else {
-            var html = '';
-            list.forEach(function (element) {
-                html += '<hr/>\
-                            <div class="item" onclick="location.href=\'/article/show/' + element.id + '\'\">\
-                                <h3>\
-                                    <label>' + element.title + '</label>\
-                                </h3>\
-                                <p>\n'
-                    + element.summary +
-                    '<span class="pull-right">' + element.time + '</span>\
-                                </p>\
-                            </div>';
-            })
-            document.getElementById('list').innerHTML = html;
-        }
-    });
+    function getDetail(id) {
+        id = isNaN(id) ? 0 : id;
+        document.getElementById('loading').style.display = 'block';
+        myAjax(0, '/article/api/' + id, '', function (data) {
+            document.getElementById('loading').style.display = 'none';
+            var article = JSON.parse(data);
+            if (article == '') {
+                document.getElementById('article').innerHTML = 'Api get no data';
+            } else {
+                var content = markdownParser(article['file'].replace(/\r\n/g, '\n'));
+                var title = '<h1>' + article['title'] + '</h1><br>';
+                var summary = '<p class="text-info"><em>' + article['summary'] + '</em></p><hr>';
+                document.getElementById('article').innerHTML = title + summary + content;
+                Prism.highlightAll();
+            }
+        });
+    }
+
+    document.onload = getDetail(window.location.pathname.split('/').pop());
 </script>
 </html>

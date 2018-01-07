@@ -3,9 +3,15 @@ String.prototype.gTrim = function () {
 };
 var reg_rep = [
     {
+        'reg': /((>\s.*\n)+)/g,
+        'rep': function (match) {
+            return '<blockquote><p>' + match.split('\n').map(i => i.substring(2)+'<br>').join('') + '</p></blockquote>';
+        }
+    },
+    {
         'reg': /```(.+)\n((?:.*\n*)+?)```\n*/g,
         'rep': function (match, p1, p2) {
-            return "<pre class=language-" + p1 + "><code class=language-" + p1 + ">" + p2.replace(/\n/g, '') + "</code></pre>\n";
+            return "<pre class=language-" + p1 + "><code class=language-" + p1 + ">" + p2 + "</code></pre>\n";
         }
     },
     {
@@ -28,36 +34,29 @@ var reg_rep = [
         'rep': '\n<br>\n'
     },
     {
-        'reg': /^#{5,}\s(.*)$/gm,
-        'rep': "<h5>$1</h5>"
+        'reg': /^(#+)\s(.*)$/gm,
+        'rep': function (match, p1, p2) {
+            var l = p1.length > 5 ? 5 : p1.length;
+            return '<div class="h' + l + '">' + p2 + '</div>';
+        }
     },
     {
-        'reg': /^#{4,}\s(.*)$/gm,
-        'rep': "<h4>$1</h4>"
-    },
-    {
-        'reg': /^#{3,}\s(.*)$/gm,
-        'rep': "<h3>$1</h3>"
-    },
-    {
-        'reg': /^#{2,}\s(.*)$/gm,
-        'rep': "<h2>$1</h2>"
-    },
-    {
-        'reg': /^#\s(.*)$/gm,
-        'rep': "<h1>$1</h1>"
+        'reg': /~{2}(.+)~{2}/g,
+        'rep': "<del>$1</del>"
     },
     {
         'reg': /\*{2}(.*)\*{2}/g,
         'rep': "<b>$1</b>"
     },
     {
-        'reg': /((-\s.*\n)+)/g,
-        'rep': "<ul>$&</ul>\n"
+        'reg': /`(.+)`/g,
+        'rep': "<code>$1</code>"
     },
     {
-        'reg': /-\s(.*)\n*/g,
-        'rep': "<li>$1</li>"
+        'reg': /((-\s.*\n)+)/g,
+        'rep': function (match) {
+            return '<ul>' + match.replace(/^-\s(.*)$/gm, "<li>$1</li>") + '</ul>';
+        }
     },
     {
         'reg': /\[(.*)\]\((.*)\)/g,
